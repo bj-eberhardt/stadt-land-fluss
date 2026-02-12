@@ -28,6 +28,15 @@
 - Bei Datei-Schreiboperationen ist Encoding explizit auf UTF-8 zu setzen.
 - Keine UTF-16/Unicode-LE-Ausgaben fuer Projektdateien.
 
+## Permanente Regel: Code- und Strukturstandards
+
+- React-Code ist in uebersichtliche, wartbare Komponenten zu gliedern.
+- Komponenten-Namen sind immer in Englisch zu benennen.
+- Theme-Styling ist in eigene CSS-Dateien pro Theme aufzuteilen.
+- Es werden keine sinnlosen Kommentare eingefuegt.
+- Falls ein Kommentar notwendig ist, muss er in Englisch formuliert sein.
+- Es sind React Best Practices und gaengige Standards konsequent einzuhalten.
+
 ## Projektkontext (fuer Agenten)
 
 ### Ueberblick
@@ -64,5 +73,6 @@
 ### Aktuelle Grenzen
 - Kein Backend / keine Persistenz / kein Login
 - Keine automatisierten Tests hinterlegt
+
 
 

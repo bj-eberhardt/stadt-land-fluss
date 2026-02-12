@@ -11,6 +11,16 @@ const reactRefresh =
   reactRefreshPlugin?.reactRefresh?.plugin ?? reactRefreshPlugin;
 
 export default tseslint.config(
+  {
+    ignores: [
+      "dist/**",
+      "node_modules/**",
+      "prettier.config.cjs",
+      "tsconfig.tsbuildinfo",
+      ".idea/**"
+    ]
+  },
+
   js.configs.recommended,
 
   // TypeScript rules (no type-aware linting by default; can be enabled later)

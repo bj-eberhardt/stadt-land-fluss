@@ -1,0 +1,6 @@
+﻿.theme-mint {
+  background-image:
+    radial-gradient(circle at 10% 12%, #8ad1a31f 0 16%, transparent 17%),
+    radial-gradient(circle at 87% 78%, #87b8ff1c 0 20%, transparent 21%),
+    linear-gradient(#fbfef9, #f7fff8);
+}

@@ -1,0 +1,18 @@
+.theme-kids {
+  background-image:
+    radial-gradient(circle at 12% 14%, #ff5f6d80 0 13px, transparent 14px),
+    radial-gradient(circle at 84% 18%, #ffd93d80 0 11px, transparent 12px),
+    radial-gradient(circle at 18% 82%, #6bcbef80 0 12px, transparent 13px),
+    radial-gradient(circle at 88% 78%, #4d96ff80 0 10px, transparent 11px),
+    radial-gradient(circle at 52% 28%, #9d4edd40 0 12px, transparent 13px),
+    radial-gradient(circle at 62% 76%, #ff922b40 0 10px, transparent 11px),
+    repeating-linear-gradient(
+      180deg,
+      #ffffff00,
+      #ffffff00 22px,
+      #4d96ff66 22px,
+      #4d96ff66 23px
+    ),
+    linear-gradient(150deg, #fff4f6 0%, #fff7d9 44%, #e8fff5 100%);
+  background-blend-mode: normal, normal, normal, normal, normal, normal, multiply, normal;
+}
