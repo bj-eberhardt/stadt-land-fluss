@@ -1,0 +1,51 @@
+{
+  "name": "stadt-land-fluss",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Stadt-Land-Fluss \u2013 React + Vite + Tailwind CSS v4 (Dev via Docker)",
+  "author": "",
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "scripts": {
+    "dev": "vite --host 0.0.0.0 --port 5174",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview --host 0.0.0.0 --port 4173",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier . --check",
+    "format:write": "prettier . --write",
+    "docker:dev": "docker compose up --build",
+    "docker:down": "docker compose down",
+    "docker:logs": "docker compose logs -f"
+  },
+  "dependencies": {
+    "react": "19.2.4",
+    "react-dom": "19.2.4"
+  },
+  "devDependencies": {
+    "@eslint/js": "9.7.0",
+    "@tailwindcss/vite": "4.1.18",
+    "@types/react": "19.2.0",
+    "@types/react-dom": "19.2.0",
+    "@vitejs/plugin-react": "5.1.4",
+    "eslint": "9.7.0",
+    "eslint-config-prettier": "10.1.8",
+    "eslint-plugin-react": "7.37.5",
+    "eslint-plugin-react-hooks": "7.0.1",
+    "eslint-plugin-react-refresh": "0.5.0",
+    "globals": "17.3.0",
+    "prettier": "3.8.1",
+    "tailwindcss": "4.1.18",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.55.0",
+    "vite": "7.3.1"
+  },
+  "overrides": {
+    "@tailwindcss/vite": {
+      "vite": "^7.0.0"
+    }
+  }
+}

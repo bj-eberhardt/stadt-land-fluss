@@ -1,0 +1,16 @@
+# Dev-only image
+FROM node:24-bookworm-slim
+
+WORKDIR /app
+
+# Install deps first for better layer caching
+COPY package.json package-lock.json* ./
+RUN npm install
+
+# Copy the rest (in docker compose we still mount the source for live reload)
+COPY . .
+
+EXPOSE 5174
+
+# `--host 0.0.0.0` makes it reachable from outside the container
+CMD ["npm", "run", "dev"]
