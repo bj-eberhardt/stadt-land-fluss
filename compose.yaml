@@ -9,6 +9,5 @@ services:
       - .:/app
       - /app/node_modules
     environment:
-      # Helps file watching on some Docker setups (esp. Windows/macOS)
       CHOKIDAR_USEPOLLING: "true"
       WATCHPACK_POLLING: "true"
