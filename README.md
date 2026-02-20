@@ -12,7 +12,8 @@ https://stadt-land-fluss.app.familie-bark.de/
 
 ### Docker Compose
 
-1) Speichere den Inhalt in einer `docker-compose.yml`:
+1. Speichere den Inhalt in einer `docker-compose.yml`:
+
 ```yaml
 services:
   stadt-land-fluss:
@@ -23,7 +24,8 @@ services:
       - "80:80"
 ```
 
-2) Starte die Anwendung mit
+2. Starte die Anwendung mit
+
 ```bash
 docker compose up -d
 ```
@@ -33,7 +35,6 @@ docker compose up -d
 ```bash
 docker run -d --name stadt-land-fluss --restart unless-stopped -p 8080:80 beberhardt/stadt-land-fluss:latest
 ```
-
 
 ## Developer Information
 
