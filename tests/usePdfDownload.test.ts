@@ -2,7 +2,7 @@ import { act, renderHook } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 const html2PdfMocks = vi.hoisted(() => {
-  const save = vi.fn(async () => {});
+  const save = vi.fn(async () => Promise.resolve());
   const instance = {
     set: vi.fn(() => instance),
     from: vi.fn(() => instance),

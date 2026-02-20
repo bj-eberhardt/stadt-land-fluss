@@ -62,7 +62,7 @@ jobs:
           echo "value=$(tr -d '\r\n[:space:]' < .nvmrc)" >> "$GITHUB_OUTPUT"
 
       - name: Run tests
-        run: npm run test
+        run: npm run test:report
 
       - name: Build project
         run: npm run build
@@ -74,22 +74,77 @@ jobs:
           path: dist
           if-no-files-found: error
 
+      - name: Upload Vitest JSON report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: vitest-report-node-${{ steps.node_version.outputs.value }}
+          path: vitest-report.json
+          if-no-files-found: warn
+
   pr_status_comment:
     name: PR status comment
     runs-on: ubuntu-latest
     if: always() && github.event_name == 'pull_request'
     needs: [lint_prettier, test_build]
     steps:
+      - name: Download Vitest report artifact
+        if: always() && needs.test_build.result != 'skipped'
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          name: vitest-report-node-${{ needs.test_build.outputs.node_version }}
+          path: .
+
       - name: Comment status on PR
         uses: actions/github-script@v7
         with:
           script: |
+            const fs = require('node:fs');
             const marker = '<!-- pr-ci-status -->';
             const lintResult = '${{ needs.lint_prettier.result }}';
             const buildResult = '${{ needs.test_build.result }}';
             const nodeVersion = '${{ needs.test_build.outputs.node_version }}';
             const icon = (result) => result === 'success' ? '\u2705' : (result === 'skipped' ? '\u23ED\uFE0F' : '\u274C');
             const overall = lintResult === 'success' && buildResult === 'success' ? '\u2705 Passed' : '\u274C Failed';
+
+            let testsSummary = '\n<details>\n<summary>\uD83E\uDDEA Testdetails (kein Report verfügbar)</summary>\n\nVitest-Report konnte nicht gelesen werden.\n\n</details>';
+            try {
+              const raw = fs.readFileSync('vitest-report.json', 'utf8');
+              const report = JSON.parse(raw);
+              const suites = Array.isArray(report.testResults) ? report.testResults : [];
+              const total = Number(report.numTotalTests ?? 0);
+              const passed = Number(report.numPassedTests ?? 0);
+              const failed = Number(report.numFailedTests ?? 0);
+              const pending = Number(report.numPendingTests ?? 0);
+
+              const suiteLines = suites.map((suite) => {
+                const assertions = Array.isArray(suite.assertionResults) ? suite.assertionResults : [];
+                const relName = String(suite.name || 'unknown').replace(process.cwd() + '/', '');
+                const tests = assertions.map((test) => {
+                  const state = String(test.status || 'unknown');
+                  const statusIcon = state === 'passed' ? '\u2705' : (state === 'failed' ? '\u274C' : '\u23F8\uFE0F');
+                  return `- ${statusIcon} ${test.fullName || test.title || 'Unnamed test'}`;
+                }).join('\n');
+                return `<details>\n<summary>\uD83D\uDCC4 ${relName}</summary>\n\n${tests || '- \u2139\uFE0F Keine Testfälle gefunden'}\n\n</details>`;
+              });
+
+              testsSummary = `
+            <details>
+            <summary>\uD83E\uDDEA Testdetails (${passed}/${total} bestanden, ${failed} fehlgeschlagen, ${pending} übersprungen)</summary>
+
+            ${suiteLines.length > 0 ? suiteLines.join('\n\n') : 'Keine Testdateien im Report gefunden.'}
+
+            </details>`;
+            } catch (error) {
+              testsSummary = `
+            <details>
+            <summary>\uD83E\uDDEA Testdetails (kein Report verfügbar)</summary>
+
+            Vitest-Report konnte nicht gelesen werden.
+
+            </details>`;
+            }
 
             const body = `${marker}
             ## \uD83D\uDEA6 PR CI Status: ${overall}
@@ -101,7 +156,9 @@ jobs:
 
             ### \u2139\uFE0F Build Info
             - \uD83D\uDFE2 Node.js: \`${nodeVersion || 'unknown'}\` (from \`.nvmrc\`)
-            - \uD83D\uDCE6 Artifact: \`dist-node-${nodeVersion || '<version>'}\` (available when build succeeds)`;
+            - \uD83D\uDCE6 Artifact: \`dist-node-${nodeVersion || '<version>'}\` (available when build succeeds)
+
+            ${testsSummary}`;
 
             const { owner, repo } = context.repo;
             const issue_number = context.issue.number;
