@@ -311,9 +311,8 @@ select,
   --preview-scale: 0.78;
   width: calc(var(--sheet-print-width) * var(--preview-scale));
   height: calc(var(--sheet-print-height) * var(--preview-scale));
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  display: block;
+  margin: 0 auto;
 }
 
 .sheet {
@@ -325,13 +324,13 @@ select,
   border-radius: 8px;
   border: 1px solid #d8cba7;
   padding: 10mm 8mm;
-  margin: 0 auto;
+  margin: 0;
   display: flex;
   flex-direction: column;
   gap: 0.45rem;
   overflow: hidden;
   transform: scale(var(--preview-scale));
-  transform-origin: top center;
+  transform-origin: top left;
 }
 
 .sheet-title-row {
