@@ -1,19 +1,7 @@
 ﻿.theme-classic {
   background-image:
     linear-gradient(#f9f8f4, #f9f8f4),
-    repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 16px,
-      #6389c01c 16px,
-      #6389c01c 17px
-    ),
-    repeating-linear-gradient(
-      90deg,
-      transparent,
-      transparent 16px,
-      #6389c014 16px,
-      #6389c014 17px
-    );
+    repeating-linear-gradient(0deg, transparent, transparent 16px, #6389c01c 16px, #6389c01c 17px),
+    repeating-linear-gradient(90deg, transparent, transparent 16px, #6389c014 16px, #6389c014 17px);
   background-blend-mode: multiply;
 }

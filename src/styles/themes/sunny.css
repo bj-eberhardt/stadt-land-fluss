@@ -1,11 +1,5 @@
 ﻿.theme-sunny {
   background-image:
     linear-gradient(#fffef8, #fffef8),
-    repeating-linear-gradient(
-      180deg,
-      #ffffff00,
-      #ffffff00 21px,
-      #d69f1c33 21px,
-      #d69f1c33 22px
-    );
+    repeating-linear-gradient(180deg, #ffffff00, #ffffff00 21px, #d69f1c33 21px, #d69f1c33 22px);
 }
