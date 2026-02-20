@@ -1,7 +1,7 @@
 {
   "name": "stadt-land-fluss",
   "private": true,
-  "version": "0.1.4",
+  "version": "0.1.9",
   "type": "module",
   "description": "Stadt-Land-Fluss - React + Vite + Tailwind CSS v4 (Dev via Docker)",
   "author": "",
