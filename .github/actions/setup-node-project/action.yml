@@ -1,32 +1,9 @@
 name: Setup Node Project
-description: Checkout repository, setup Node from .nvmrc, and install dependencies.
-
-inputs:
-  fetch-depth:
-    description: Git fetch depth passed to actions/checkout.
-    required: false
-    default: "1"
-  token:
-    description: Optional token for actions/checkout.
-    required: false
-    default: ""
+description: Setup Node from .nvmrc and install dependencies.
 
 runs:
   using: composite
   steps:
-    - name: Checkout
-      if: ${{ inputs.token == '' }}
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: ${{ inputs.fetch-depth }}
-
-    - name: Checkout with token
-      if: ${{ inputs.token != '' }}
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: ${{ inputs.fetch-depth }}
-        token: ${{ inputs.token }}
-
     - name: Setup Node from .nvmrc
       uses: actions/setup-node@v4
       with:

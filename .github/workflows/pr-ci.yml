@@ -18,6 +18,9 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.pull_request.draft == false
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Setup project
         uses: ./.github/actions/setup-node-project
 
@@ -47,6 +50,9 @@ jobs:
     outputs:
       node_version: ${{ steps.node_version.outputs.value }}
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Setup project
         uses: ./.github/actions/setup-node-project
 
