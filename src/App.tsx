@@ -4,6 +4,7 @@ import { PreviewPanel } from "./components/PreviewPanel";
 import { ShareNotification } from "./components/ShareNotification";
 import { PRESETS } from "./constants/game";
 import { useGameState } from "./hooks/useGameState";
+import { usePdfDownload } from "./hooks/usePdfDownload";
 
 const HERO_DESCRIPTION =
   "Stelle deine Kategorien zusammen, wähle ein Thema und drucke deinen Block als A4-Seite im Querformat aus.";
@@ -30,6 +31,7 @@ export default function App() {
     handleDeleteColumn,
     handleShare,
   } = useGameState();
+  const handleDownloadPdf = usePdfDownload();
 
   return (
     <main className="app-shell">
@@ -63,6 +65,7 @@ export default function App() {
         paperClassName={activeThemePaperClass}
         onPrint={() => window.print()}
         onShare={handleShare}
+        onDownloadPdf={handleDownloadPdf}
       />
     </main>
   );

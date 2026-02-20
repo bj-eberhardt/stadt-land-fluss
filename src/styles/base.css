@@ -175,6 +175,10 @@ select,
   color: #1f447d;
 }
 
+.hide-on-mobile {
+  display: inline-flex;
+}
+
 .columns-editor {
   display: grid;
   gap: 0.45rem;
@@ -428,6 +432,10 @@ select,
 }
 
 @media (max-width: 640px) {
+  .hide-on-mobile {
+    display: none;
+  }
+
   .sheet-scale {
     --preview-scale: 0.54;
   }

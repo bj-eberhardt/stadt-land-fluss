@@ -5,6 +5,7 @@ interface PreviewPanelProps {
   paperClassName: string;
   onPrint: () => void;
   onShare: () => void;
+  onDownloadPdf: () => void;
 }
 
 export function PreviewPanel({
@@ -12,7 +13,13 @@ export function PreviewPanel({
   paperClassName,
   onPrint,
   onShare,
+  onDownloadPdf,
 }: PreviewPanelProps) {
+  const isMobile =
+    typeof window !== "undefined" &&
+    typeof window.matchMedia === "function" &&
+    window.matchMedia("(max-width: 640px)").matches;
+
   return (
     <section className="panel preview-panel">
       <div className="preview-header">
@@ -21,9 +28,14 @@ export function PreviewPanel({
           <button type="button" className="paper-btn paper-btn-secondary" onClick={onShare}>
             Teilen
           </button>
-          <button type="button" className="paper-btn" onClick={onPrint}>
-            Drucken
+          <button type="button" className="paper-btn paper-btn-secondary" onClick={onDownloadPdf}>
+            PDF herunterladen
           </button>
+          {isMobile ? null : (
+            <button type="button" className="paper-btn" onClick={onPrint}>
+              Drucken
+            </button>
+          )}
         </div>
       </div>
 
