@@ -1,0 +1,138 @@
+name: PR CI
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: pr-ci-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  lint_prettier:
+    name: Lint and Prettier
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node from .nvmrc
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run lint autofix and prettier write
+        run: |
+          npm run lint:fix
+          npm run format:write
+
+      - name: Fail if lint/format produced changes
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "Lint/format generated changes. Please run 'npm run lint:fix' and 'npm run format:write' locally and commit the result."
+            git status --short
+            git diff --name-only
+            exit 1
+          fi
+
+      - name: Verify lint and prettier checks
+        run: |
+          npm run lint
+          npm run format
+
+  test_build:
+    name: Test and Build
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node from .nvmrc
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Read Node version
+        id: node_version
+        run: |
+          echo "value=$(tr -d '\r\n[:space:]' < .nvmrc)" >> "$GITHUB_OUTPUT"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm run test
+
+      - name: Build project
+        run: npm run build
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-node-${{ steps.node_version.outputs.value }}
+          path: dist
+          if-no-files-found: error
+
+  pr_status_comment:
+    name: PR status comment
+    runs-on: ubuntu-latest
+    if: always() && github.event_name == 'pull_request'
+    needs: [lint_prettier, test_build]
+    steps:
+      - name: Comment status on PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const marker = '<!-- pr-ci-status -->';
+            const lintResult = '${{ needs.lint_prettier.result }}';
+            const buildResult = '${{ needs.test_build.result }}';
+            const icon = (result) => result === 'success' ? '[OK]' : (result === 'skipped' ? '[SKIP]' : '[FAIL]');
+
+            const body = `${marker}
+            ## PR CI Status
+            - ${icon(lintResult)} \`lint_prettier\`: **${lintResult}**
+            - ${icon(buildResult)} \`test_build\`: **${buildResult}**
+
+            Node version source: \`.nvmrc\`.
+            Artifact: \`dist-node-<nvmrc-version>\` (only when build succeeds).`;
+
+            const { owner, repo } = context.repo;
+            const issue_number = context.issue.number;
+
+            const comments = await github.paginate(github.rest.issues.listComments, {
+              owner,
+              repo,
+              issue_number,
+              per_page: 100
+            });
+
+            const existing = comments.find((comment) =>
+              comment.user?.type === 'Bot' && comment.body?.includes(marker)
+            );
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner,
+                repo,
+                comment_id: existing.id,
+                body
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number,
+                body
+              });
+            }
