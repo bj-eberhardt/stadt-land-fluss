@@ -7,8 +7,7 @@ import reactRefreshPlugin from "eslint-plugin-react-refresh";
 import prettier from "eslint-config-prettier";
 
 // eslint-plugin-react-refresh ships ESM and (in newer versions) exposes a `reactRefresh` export.
-const reactRefresh =
-  reactRefreshPlugin?.reactRefresh?.plugin ?? reactRefreshPlugin;
+const reactRefresh = reactRefreshPlugin?.reactRefresh?.plugin ?? reactRefreshPlugin;
 
 export default tseslint.config(
   {
@@ -17,8 +16,8 @@ export default tseslint.config(
       "node_modules/**",
       "prettier.config.cjs",
       "tsconfig.tsbuildinfo",
-      ".idea/**"
-    ]
+      ".idea/**",
+    ],
   },
 
   js.configs.recommended,
@@ -33,16 +32,16 @@ export default tseslint.config(
       ecmaVersion: "latest",
       sourceType: "module",
       globals: {
-        ...globals.browser
-      }
+        ...globals.browser,
+      },
     },
     plugins: {
       react,
       "react-hooks": reactHooks,
-      "react-refresh": reactRefresh
+      "react-refresh": reactRefresh,
     },
     settings: {
-      react: { version: "detect" }
+      react: { version: "detect" },
     },
     rules: {
       // React
@@ -53,13 +52,10 @@ export default tseslint.config(
       ...reactHooks.configs.recommended.rules,
 
       // Vite Fast Refresh
-      "react-refresh/only-export-components": [
-        "warn",
-        { allowConstantExport: true }
-      ]
-    }
+      "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
+    },
   },
 
   // Disable rules that conflict with Prettier
-  prettier
+  prettier,
 );

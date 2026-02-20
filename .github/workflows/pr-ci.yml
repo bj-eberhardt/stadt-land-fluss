@@ -18,17 +18,8 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.pull_request.draft == false
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node from .nvmrc
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: .nvmrc
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci
+      - name: Setup project
+        uses: ./.github/actions/setup-node-project
 
       - name: Run lint autofix and prettier write
         run: |
@@ -53,23 +44,16 @@ jobs:
     name: Test and Build
     runs-on: ubuntu-latest
     if: github.event.pull_request.draft == false
+    outputs:
+      node_version: ${{ steps.node_version.outputs.value }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node from .nvmrc
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: .nvmrc
-          cache: npm
+      - name: Setup project
+        uses: ./.github/actions/setup-node-project
 
       - name: Read Node version
         id: node_version
         run: |
           echo "value=$(tr -d '\r\n[:space:]' < .nvmrc)" >> "$GITHUB_OUTPUT"
-
-      - name: Install dependencies
-        run: npm ci
 
       - name: Run tests
         run: npm run test
@@ -97,42 +81,28 @@ jobs:
             const marker = '<!-- pr-ci-status -->';
             const lintResult = '${{ needs.lint_prettier.result }}';
             const buildResult = '${{ needs.test_build.result }}';
-            const icon = (result) => result === 'success' ? '[OK]' : (result === 'skipped' ? '[SKIP]' : '[FAIL]');
+            const nodeVersion = '${{ needs.test_build.outputs.node_version }}';
+            const icon = (result) => result === 'success' ? '\u2705' : (result === 'skipped' ? '\u23ED\uFE0F' : '\u274C');
+            const overall = lintResult === 'success' && buildResult === 'success' ? '\u2705 Passed' : '\u274C Failed';
 
             const body = `${marker}
-            ## PR CI Status
-            - ${icon(lintResult)} \`lint_prettier\`: **${lintResult}**
-            - ${icon(buildResult)} \`test_build\`: **${buildResult}**
+            ## \uD83D\uDEA6 PR CI Status: ${overall}
 
-            Node version source: \`.nvmrc\`.
-            Artifact: \`dist-node-<nvmrc-version>\` (only when build succeeds).`;
+            | Check | Result |
+            | --- | --- |
+            | \uD83E\uDDF9 Lint + Prettier | ${icon(lintResult)} **${lintResult}** |
+            | \uD83E\uDDEA Test + Build | ${icon(buildResult)} **${buildResult}** |
+
+            ### \u2139\uFE0F Build Info
+            - \uD83D\uDFE2 Node.js: \`${nodeVersion || 'unknown'}\` (from \`.nvmrc\`)
+            - \uD83D\uDCE6 Artifact: \`dist-node-${nodeVersion || '<version>'}\` (available when build succeeds)`;
 
             const { owner, repo } = context.repo;
             const issue_number = context.issue.number;
 
-            const comments = await github.paginate(github.rest.issues.listComments, {
+            await github.rest.issues.createComment({
               owner,
               repo,
               issue_number,
-              per_page: 100
+              body
             });
-
-            const existing = comments.find((comment) =>
-              comment.user?.type === 'Bot' && comment.body?.includes(marker)
-            );
-
-            if (existing) {
-              await github.rest.issues.updateComment({
-                owner,
-                repo,
-                comment_id: existing.id,
-                body
-              });
-            } else {
-              await github.rest.issues.createComment({
-                owner,
-                repo,
-                issue_number,
-                body
-              });
-            }

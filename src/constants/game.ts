@@ -43,7 +43,7 @@ export const PRESET_COLUMNS = [
   "Märchenfigur",
   "Videospiel",
   "Zeitschrift/Zeitung",
-  "Bauwerk"
+  "Bauwerk",
 ] as const;
 
 export const SCIENTIFIC_PRESET_COLUMNS = [
@@ -61,7 +61,7 @@ export const SCIENTIFIC_PRESET_COLUMNS = [
   "Mathebegriff",
   "Wetterbegriff",
   "Krankheit",
-  "Computerteil"
+  "Computerteil",
 ] as const;
 
 export const ADULT_PRESET_COLUMNS = [
@@ -77,8 +77,8 @@ export const ADULT_PRESET_COLUMNS = [
   "Flirtspruch",
   "Sexausrede",
   "Nachtaktivität",
-  "Politiker"
- ] as const;
+  "Politiker",
+] as const;
 
 export const TV_AND_FILM_PRESET_COLUMNS = [
   "Filmgenre",
@@ -106,7 +106,7 @@ export const KIDS_PRESET_COLUMNS = [
   "Kleiner als ein Fußball",
   "Märchen",
   "Im Flugzeug",
-  "In der Schule"
+  "In der Schule",
 ] as const;
 
 export const CLASSIC_PRESET_COLUMNS = [

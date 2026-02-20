@@ -1,5 +1,4 @@
-﻿
-:root {
+﻿:root {
   --app-bg: linear-gradient(140deg, #f5ecd8 0%, #f8f0de 45%, #efe2c3 100%);
   --ink-blue: #2a4a7f;
   --ink-green: #2b6a43;
@@ -160,7 +159,9 @@ select,
   padding: 0.35rem 0.75rem;
   border-radius: 999px;
   cursor: pointer;
-  transition: transform 0.14s ease, box-shadow 0.14s ease;
+  transition:
+    transform 0.14s ease,
+    box-shadow 0.14s ease;
 }
 
 .paper-btn:hover {
@@ -506,5 +507,4 @@ select,
   .sheet td.points-column {
     border-left: 0.7mm solid #2f3f5a;
   }
-
 }

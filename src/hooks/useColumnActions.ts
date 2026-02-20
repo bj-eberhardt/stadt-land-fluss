@@ -1,14 +1,6 @@
 import { useCallback, type Dispatch, type SetStateAction } from "react";
-import {
-  FIXED_COLUMNS,
-  MAX_COLUMN_COUNT,
-  RANDOM_COLUMN_COUNT,
-} from "../constants/game";
-import {
-  addNormalized,
-  getUniqueUsed,
-  pickRandomFromAvailable,
-} from "../utils/categoryUtils";
+import { FIXED_COLUMNS, MAX_COLUMN_COUNT, RANDOM_COLUMN_COUNT } from "../constants/game";
+import { addNormalized, getUniqueUsed, pickRandomFromAvailable } from "../utils/categoryUtils";
 
 interface UseColumnActionsParams {
   enforceClassic: boolean;

@@ -10,10 +10,7 @@ import {
 import { getColumnsFromPresets } from "../utils/categoryUtils";
 import { createInitialColumns, getVisibleColumns } from "../utils/columnUtils";
 import { readShareStateFromUrl } from "../utils/shareState";
-import {
-  useShareState,
-  type ShareNotificationState,
-} from "./useShareState";
+import { useShareState, type ShareNotificationState } from "./useShareState";
 import { useColumnActions } from "./useColumnActions";
 
 interface InitialAppState {
@@ -83,7 +80,8 @@ function getInitialAppState(): InitialAppState {
         .slice(0, MAX_COLUMN_COUNT)
     : [];
 
-  const columns = normalizedColumns.length > 0 ? normalizedColumns : createInitialColumns(enforceClassic);
+  const columns =
+    normalizedColumns.length > 0 ? normalizedColumns : createInitialColumns(enforceClassic);
 
   if (enforceClassic) {
     while (columns.length < FIXED_COLUMNS.length) {
@@ -97,7 +95,9 @@ function getInitialAppState(): InitialAppState {
 
   const selectedPresetIds = Array.isArray(shared.p)
     ? shared.p.filter((presetId, index, ids) => {
-        return typeof presetId === "string" && presetIds.has(presetId) && ids.indexOf(presetId) === index;
+        return (
+          typeof presetId === "string" && presetIds.has(presetId) && ids.indexOf(presetId) === index
+        );
       })
     : DEFAULT_SELECTED_PRESET_IDS;
 
@@ -115,7 +115,9 @@ export function useGameState(): UseGameStateResult {
   const [selectedThemeId, setSelectedThemeId] = useState<string>(initialState.selectedThemeId);
   const [enforceClassic, setEnforceClassic] = useState<boolean>(initialState.enforceClassic);
   const [columns, setColumns] = useState<string[]>(initialState.columns);
-  const [selectedPresetIds, setSelectedPresetIds] = useState<string[]>(initialState.selectedPresetIds);
+  const [selectedPresetIds, setSelectedPresetIds] = useState<string[]>(
+    initialState.selectedPresetIds,
+  );
 
   const activeTheme = useMemo(
     () => THEMES.find((theme) => theme.id === selectedThemeId) ?? DEFAULT_THEME,
@@ -131,11 +133,7 @@ export function useGameState(): UseGameStateResult {
 
   const hasActivePresets = availablePresetColumns.length > 0;
 
-  const {
-    shareNotification,
-    clearShareNotification,
-    handleShare,
-  } = useShareState({
+  const { shareNotification, clearShareNotification, handleShare } = useShareState({
     selectedThemeId,
     columns,
     enforceClassic,

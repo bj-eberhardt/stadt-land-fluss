@@ -45,7 +45,10 @@ export function getColumnsFromPresets(selectedPresetIds: string[], presets: Pres
   return result;
 }
 
-export function pickRandomFromAvailable(availableColumns: string[], used: Set<string>): string | null {
+export function pickRandomFromAvailable(
+  availableColumns: string[],
+  used: Set<string>,
+): string | null {
   const available = availableColumns.filter((entry) => !used.has(normalize(entry)));
 
   if (available.length === 0) {
