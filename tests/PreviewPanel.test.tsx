@@ -3,8 +3,25 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { PREVIEW_ROWS } from "../src/constants/game";
 import { PreviewPanel } from "../src/components/PreviewPanel";
 
+function mockMatchMedia(matches: boolean) {
+  Object.defineProperty(window, "matchMedia", {
+    writable: true,
+    value: vi.fn().mockImplementation(() => ({
+      matches,
+      media: "(max-width: 640px)",
+      onchange: null,
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    })),
+  });
+}
+
 afterEach(() => {
   cleanup();
+  vi.restoreAllMocks();
 });
 
 describe("PreviewPanel", () => {
@@ -15,6 +32,7 @@ describe("PreviewPanel", () => {
         paperClassName="theme-kids"
         onPrint={vi.fn()}
         onShare={vi.fn()}
+        onDownloadPdf={vi.fn()}
       />,
     );
 
@@ -31,8 +49,11 @@ describe("PreviewPanel", () => {
     expect(sheet?.className).toContain("theme-kids");
   });
 
-  it("triggers share and print callbacks", () => {
+  it("triggers share, pdf and print callbacks on desktop", () => {
+    mockMatchMedia(false);
+
     const onShare = vi.fn();
+    const onDownloadPdf = vi.fn();
     const onPrint = vi.fn();
 
     render(
@@ -41,13 +62,33 @@ describe("PreviewPanel", () => {
         paperClassName="theme-classic"
         onPrint={onPrint}
         onShare={onShare}
+        onDownloadPdf={onDownloadPdf}
       />,
     );
 
     fireEvent.click(screen.getByRole("button", { name: "Teilen" }));
+    fireEvent.click(screen.getByRole("button", { name: "PDF herunterladen" }));
     fireEvent.click(screen.getByRole("button", { name: "Drucken" }));
 
     expect(onShare).toHaveBeenCalledTimes(1);
+    expect(onDownloadPdf).toHaveBeenCalledTimes(1);
     expect(onPrint).toHaveBeenCalledTimes(1);
+  });
+
+  it("does not render print button on mobile", () => {
+    mockMatchMedia(true);
+
+    render(
+      <PreviewPanel
+        visibleColumns={["Tier"]}
+        paperClassName="theme-classic"
+        onPrint={vi.fn()}
+        onShare={vi.fn()}
+        onDownloadPdf={vi.fn()}
+      />,
+    );
+
+    expect(screen.queryByRole("button", { name: "Drucken" })).toBeNull();
+    expect(screen.queryByRole("button", { name: "PDF herunterladen" })).not.toBeNull();
   });
 });
