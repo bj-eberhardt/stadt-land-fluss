@@ -19,19 +19,10 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'workflow_dispatch' || (github.actor != 'github-actions[bot]' && !contains(github.event.head_commit.message, '[skip release]'))
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Setup project
+        uses: ./.github/actions/setup-node-project
         with:
-          fetch-depth: 0
-
-      - name: Setup Node from .nvmrc
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: .nvmrc
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci
+          fetch-depth: "0"
 
       - name: Build
         run: npm run build
