@@ -19,11 +19,14 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'workflow_dispatch' || (github.actor != 'github-actions[bot]' && !contains(github.event.head_commit.message, '[skip release]'))
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GH_PAT }}
+
       - name: Setup project
         uses: ./.github/actions/setup-node-project
-        with:
-          fetch-depth: "0"
-          token: ${{ secrets.GH_PAT }}
 
       - name: Build
         run: npm run build
@@ -54,11 +57,10 @@ jobs:
           VERSION=$(node -p "require('./package.json').version")
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
-
       - name: Create GitHub Release and upload artifact
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.get-version.outputs.version }}
           files: dist.tar.gz
           generate_release_notes: true
-          name: 'Release ${{ steps.get-version.outputs.version }}'
+          name: "Release ${{ steps.get-version.outputs.version }}"
