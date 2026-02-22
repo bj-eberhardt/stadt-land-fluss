@@ -1,10 +1,17 @@
 ﻿import type { Preset } from "../types/preset";
+import type { PreviewOptions } from "../types/preview";
 import type { Theme } from "../types/theme";
 
 export const FIXED_COLUMNS = ["Stadt", "Land", "Fluss"];
 export const RANDOM_COLUMN_COUNT = 8;
 export const MAX_COLUMN_COUNT = 12;
 export const PREVIEW_ROWS = 13;
+export const LETTER_BAR_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+export const DEFAULT_PREVIEW_OPTIONS: PreviewOptions = {
+  showDateLine: true,
+  showLetterColumn: false,
+  showLetterBar: false,
+};
 
 export const PRESET_COLUMNS = [
   "Tier",

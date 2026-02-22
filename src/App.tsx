@@ -1,4 +1,5 @@
 import { ControlsPanel } from "./components/ControlsPanel";
+import { Footer } from "./components/Footer";
 import { HeroSection } from "./components/HeroSection";
 import { PreviewPanel } from "./components/PreviewPanel";
 import { ShareNotification } from "./components/ShareNotification";
@@ -15,6 +16,7 @@ export default function App() {
     enforceClassic,
     columns,
     selectedPresetIds,
+    previewOptions,
     hasActivePresets,
     visibleColumns,
     activeThemePaperClass,
@@ -29,6 +31,7 @@ export default function App() {
     handleColumnChange,
     handleRerollColumn,
     handleDeleteColumn,
+    handlePreviewOptionChange,
     handleShare,
   } = useGameState();
   const handleDownloadPdf = usePdfDownload();
@@ -62,11 +65,15 @@ export default function App() {
 
       <PreviewPanel
         visibleColumns={visibleColumns}
+        previewOptions={previewOptions}
         paperClassName={activeThemePaperClass}
+        onPreviewOptionChange={handlePreviewOptionChange}
         onPrint={() => window.print()}
         onShare={handleShare}
         onDownloadPdf={handleDownloadPdf}
       />
+
+      <Footer />
     </main>
   );
 }

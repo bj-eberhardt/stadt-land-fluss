@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
+import type { PreviewOptions } from "../types/preview";
 import { createShareUrl } from "../utils/shareState";
 
 export interface ShareNotificationState {
@@ -11,6 +12,7 @@ interface UseShareStateParams {
   columns: string[];
   enforceClassic: boolean;
   selectedPresetIds: string[];
+  previewOptions: PreviewOptions;
 }
 
 interface UseShareStateResult {
@@ -30,6 +32,7 @@ export function useShareState({
   columns,
   enforceClassic,
   selectedPresetIds,
+  previewOptions,
 }: UseShareStateParams): UseShareStateResult {
   const [shareNotification, setShareNotification] = useState<ShareNotificationState | null>(null);
 
@@ -43,8 +46,9 @@ export function useShareState({
       c: columns,
       ec: enforceClassic,
       p: selectedPresetIds,
+      po: previewOptions,
     });
-  }, [columns, enforceClassic, selectedPresetIds, selectedThemeId]);
+  }, [columns, enforceClassic, previewOptions, selectedPresetIds, selectedThemeId]);
 
   const clearShareNotification = useCallback(() => {
     setShareNotification(null);

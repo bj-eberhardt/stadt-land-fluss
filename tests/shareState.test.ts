@@ -8,6 +8,11 @@ describe("shareState", () => {
       c: ["Tier", "Farbe"],
       ec: false,
       p: ["general", "kids"],
+      po: {
+        showDateLine: false,
+        showLetterColumn: true,
+        showLetterBar: true,
+      },
     };
 
     const shareUrl = createShareUrl("http://localhost/?foo=1", payload);
@@ -29,5 +34,20 @@ describe("shareState", () => {
   it("returns null for malformed url input", () => {
     const parsed = readShareStateFromUrl("not-a-valid-url");
     expect(parsed).toBeNull();
+  });
+
+  it("supports legacy payloads without preview options", () => {
+    const legacyPayload = {
+      t: "classic",
+      c: ["Stadt", "Land"],
+      ec: true,
+      p: ["klassiker"],
+    };
+
+    const shareUrl = createShareUrl("http://localhost/", legacyPayload);
+    const parsed = readShareStateFromUrl(shareUrl);
+
+    expect(parsed).toEqual(legacyPayload);
+    expect(parsed?.po).toBeUndefined();
   });
 });

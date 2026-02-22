@@ -2,24 +2,28 @@ import { act, renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { FIXED_COLUMNS } from "../src/constants/game";
 import { useGameState } from "../src/hooks/useGameState";
-import { createShareUrl } from "../src/utils/shareState";
+import { createShareUrl, readShareStateFromUrl } from "../src/utils/shareState";
+import type { PreviewOptions } from "../src/types/preview";
 
 interface SharedStateOptions {
   columns: string[];
   enforceClassic?: boolean;
   selectedPresetIds?: string[];
+  previewOptions?: Partial<PreviewOptions>;
 }
 
 function setSharedState({
   columns,
   enforceClassic = false,
   selectedPresetIds = ["general"],
+  previewOptions,
 }: SharedStateOptions): void {
   const sharedUrl = createShareUrl(window.location.href, {
     t: "classic",
     c: columns,
     ec: enforceClassic,
     p: selectedPresetIds,
+    po: previewOptions,
   });
 
   window.history.replaceState(null, "", new URL(sharedUrl).pathname + new URL(sharedUrl).search);
@@ -184,5 +188,80 @@ describe("useGameState - sharing", () => {
 
     expect(result.current.shareNotification).toBeNull();
     vi.useRealTimers();
+  });
+});
+
+describe("useGameState - preview options", () => {
+  beforeEach(() => {
+    vi.restoreAllMocks();
+    window.history.replaceState(null, "", "/");
+  });
+
+  it("updates preview options independently", () => {
+    const { result } = renderHook(() => useGameState());
+
+    expect(result.current.previewOptions.showDateLine).toBe(true);
+    expect(result.current.previewOptions.showLetterColumn).toBe(false);
+    expect(result.current.previewOptions.showLetterBar).toBe(false);
+
+    act(() => {
+      result.current.handlePreviewOptionChange("showLetterColumn", true);
+      result.current.handlePreviewOptionChange("showLetterBar", true);
+      result.current.handlePreviewOptionChange("showDateLine", false);
+    });
+
+    expect(result.current.previewOptions).toEqual({
+      showDateLine: false,
+      showLetterColumn: true,
+      showLetterBar: true,
+    });
+  });
+
+  it("initializes preview options from shared URL", () => {
+    setSharedState({
+      columns: ["Tier"],
+      previewOptions: {
+        showDateLine: false,
+        showLetterColumn: true,
+        showLetterBar: true,
+      },
+    });
+
+    const { result } = renderHook(() => useGameState());
+
+    expect(result.current.previewOptions).toEqual({
+      showDateLine: false,
+      showLetterColumn: true,
+      showLetterBar: true,
+    });
+  });
+});
+
+describe("useGameState - sharing includes preview options", () => {
+  beforeEach(() => {
+    vi.restoreAllMocks();
+    window.history.replaceState(null, "", "/");
+  });
+
+  it("writes preview options to the generated share URL", async () => {
+    const { result } = renderHook(() => useGameState());
+
+    act(() => {
+      result.current.handlePreviewOptionChange("showDateLine", false);
+      result.current.handlePreviewOptionChange("showLetterColumn", true);
+      result.current.handlePreviewOptionChange("showLetterBar", true);
+    });
+
+    await act(async () => {
+      await result.current.handleShare();
+    });
+
+    const parsed = readShareStateFromUrl(window.location.href);
+
+    expect(parsed?.po).toEqual({
+      showDateLine: false,
+      showLetterColumn: true,
+      showLetterBar: true,
+    });
   });
 });

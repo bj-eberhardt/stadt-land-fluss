@@ -1,8 +1,11 @@
-﻿export interface ShareStatePayload {
+import type { PreviewOptions } from "../types/preview";
+
+export interface ShareStatePayload {
   t: string;
   c: string[];
   ec: boolean;
   p: string[];
+  po?: Partial<PreviewOptions>;
 }
 
 const SHARE_PARAM = "state";

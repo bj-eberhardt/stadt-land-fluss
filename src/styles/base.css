@@ -39,6 +39,21 @@ button {
   gap: 1rem;
 }
 
+.app-footer {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: #6d5528;
+  padding: 0.1rem 0 0.4rem;
+}
+
+.app-footer small {
+  display: inline-block;
+  border: 1px dashed #cbb786;
+  background: #fff9e6b5;
+  border-radius: 999px;
+  padding: 0.2rem 0.65rem;
+}
+
 .hero,
 .panel {
   background: var(--panel);
@@ -262,6 +277,28 @@ select,
   gap: 0.45rem;
 }
 
+.preview-options {
+  border: 2px dashed #cbb786;
+  border-radius: 10px;
+  padding: 0.5rem 0.7rem 0.6rem;
+  margin: 0 0 0.7rem;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.preview-options-title {
+  color: var(--ink-green);
+  font-weight: 700;
+  padding: 0 0.25rem;
+}
+
+.preview-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--ink-blue);
+}
+
 .share-notification {
   position: fixed;
   top: 1rem;
@@ -321,6 +358,10 @@ select,
 
 .sheet {
   --sheet-height: 194mm;
+  --sheet-letter-bar-space: 0mm;
+  --sheet-points-column-width: 9%;
+  --sheet-points-column-min-width: 11mm;
+  --sheet-row-height: calc((var(--sheet-height) - 42mm - var(--sheet-letter-bar-space)) / 13);
   width: var(--sheet-print-width);
   height: var(--sheet-print-height);
   background: var(--paper);
@@ -373,6 +414,53 @@ select,
   height: 100%;
 }
 
+.sheet.sheet-with-letter-bar {
+  --sheet-letter-bar-space: 6mm;
+}
+
+.sheet.sheet-pdf-export.sheet-with-letter-bar {
+  --sheet-letter-bar-space: 10mm;
+}
+
+.sheet-table-wrap {
+  flex: 1;
+  min-height: 0;
+}
+
+.sheet-letter-bar {
+  display: grid;
+  grid-template-columns: repeat(26, minmax(0, 1fr));
+  width: 100%;
+  gap: 0.04rem;
+  border: 1.2px solid #4a5e7d;
+  background: #fff8dc;
+  padding: 0.04rem;
+  margin-top: auto;
+  min-height: var(--sheet-letter-bar-space);
+  align-content: stretch;
+}
+
+.sheet-letter-bar span {
+  border: 0.8px solid #4a5e7d80;
+  color: #27457a;
+  font-weight: 700;
+  line-height: 1;
+  padding: 0.02rem 0;
+  font-size: 0.72em;
+  background: #fffdf0cc;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  align-self: stretch;
+  min-height: 0.85rem;
+  overflow: hidden;
+}
+
+.sheet.sheet-pdf-export .sheet-letter-bar span {
+  font-size: 0.62em;
+  min-height: 1.25rem;
+}
+
 .sheet th,
 .sheet td {
   border: 1.6px solid #4a5e7d;
@@ -392,14 +480,26 @@ select,
 }
 
 .sheet td {
-  height: calc((var(--sheet-height) - 42mm) / 13);
+  height: var(--sheet-row-height);
 }
 
 .sheet th.points-column,
 .sheet td.points-column {
-  width: 12%;
-  min-width: 18mm;
+  width: var(--sheet-points-column-width);
+  min-width: var(--sheet-points-column-min-width);
+  max-width: var(--sheet-points-column-min-width);
   border-left: 2.6px solid #2f3f5a;
+}
+
+.sheet th.letter-column,
+.sheet td.letter-column {
+  width: var(--sheet-row-height);
+  min-width: var(--sheet-row-height);
+  max-width: var(--sheet-row-height);
+  font-weight: 700;
+  color: #27457a;
+  background: #f7f4e7;
+  padding: 0;
 }
 
 .sheet th.points-column {
@@ -411,8 +511,13 @@ select,
     --preview-scale: 0.86;
   }
 
-  .sheet td {
-    height: calc((var(--sheet-height) - 40mm) / 13);
+  .sheet {
+    --sheet-row-height: calc((var(--sheet-height) - 40mm) / 13);
+  }
+
+  .sheet.sheet-with-letter-bar {
+    --sheet-letter-bar-space: 5mm;
+    --sheet-row-height: calc((var(--sheet-height) - 40mm - var(--sheet-letter-bar-space)) / 13);
   }
 
   .app-shell {
@@ -459,6 +564,7 @@ select,
   .hero,
   .controls-panel,
   .preview-header,
+  .preview-options,
   .share-notification {
     display: none !important;
   }
@@ -501,10 +607,6 @@ select,
     min-width: 0;
   }
 
-  .sheet td {
-    height: calc((var(--sheet-height) - 42mm) / 13);
-  }
-
   .sheet th,
   .sheet td {
     border: 0.45mm solid #3b4b66;
@@ -513,5 +615,20 @@ select,
   .sheet th.points-column,
   .sheet td.points-column {
     border-left: 0.7mm solid #2f3f5a;
+  }
+
+  .sheet-letter-bar {
+    gap: 0.02rem;
+    padding: 0.02rem;
+    border-width: 0.35mm;
+    min-height: 4mm;
+  }
+
+  .sheet-letter-bar span {
+    font-size: 0.5em;
+    line-height: 1;
+    padding: 0;
+    min-height: 2.4mm;
+    border-width: 0.25mm;
   }
 }

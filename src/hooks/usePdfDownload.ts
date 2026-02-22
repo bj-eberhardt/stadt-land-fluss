@@ -18,6 +18,7 @@ export function usePdfDownload(): () => Promise<void> {
 
     const wrapper = document.createElement("div");
     const clone = sheet.cloneNode(true) as HTMLElement;
+    clone.classList.add("sheet-pdf-export");
 
     wrapper.style.position = "fixed";
     wrapper.style.left = "-100000px";
