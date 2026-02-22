@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
 import {
+  DEFAULT_PREVIEW_OPTIONS,
   DEFAULT_SELECTED_PRESET_IDS,
   DEFAULT_THEME,
   FIXED_COLUMNS,
@@ -7,6 +8,7 @@ import {
   PRESETS,
   THEMES,
 } from "../constants/game";
+import type { PreviewOptions } from "../types/preview";
 import { getColumnsFromPresets } from "../utils/categoryUtils";
 import { createInitialColumns, getVisibleColumns } from "../utils/columnUtils";
 import { readShareStateFromUrl } from "../utils/shareState";
@@ -18,6 +20,7 @@ interface InitialAppState {
   enforceClassic: boolean;
   columns: string[];
   selectedPresetIds: string[];
+  previewOptions: PreviewOptions;
 }
 
 interface UseGameStateResult {
@@ -25,6 +28,7 @@ interface UseGameStateResult {
   enforceClassic: boolean;
   columns: string[];
   selectedPresetIds: string[];
+  previewOptions: PreviewOptions;
   hasActivePresets: boolean;
   visibleColumns: string[];
   activeThemePaperClass: string;
@@ -39,6 +43,10 @@ interface UseGameStateResult {
   handleColumnChange: (index: number, nextValue: string) => void;
   handleRerollColumn: (index: number) => void;
   handleDeleteColumn: (index: number) => void;
+  handlePreviewOptionChange: <TOptionKey extends keyof PreviewOptions>(
+    optionKey: TOptionKey,
+    checked: PreviewOptions[TOptionKey],
+  ) => void;
   handleShare: () => Promise<void>;
 }
 
@@ -54,6 +62,7 @@ function getInitialAppState(): InitialAppState {
       enforceClassic: fallbackEnforceClassic,
       columns: fallbackColumns,
       selectedPresetIds: DEFAULT_SELECTED_PRESET_IDS,
+      previewOptions: DEFAULT_PREVIEW_OPTIONS,
     };
   }
 
@@ -64,6 +73,7 @@ function getInitialAppState(): InitialAppState {
       enforceClassic: fallbackEnforceClassic,
       columns: fallbackColumns,
       selectedPresetIds: DEFAULT_SELECTED_PRESET_IDS,
+      previewOptions: DEFAULT_PREVIEW_OPTIONS,
     };
   }
 
@@ -101,11 +111,27 @@ function getInitialAppState(): InitialAppState {
       })
     : DEFAULT_SELECTED_PRESET_IDS;
 
+  const previewOptions: PreviewOptions = {
+    showDateLine:
+      typeof shared.po?.showDateLine === "boolean"
+        ? shared.po.showDateLine
+        : DEFAULT_PREVIEW_OPTIONS.showDateLine,
+    showLetterColumn:
+      typeof shared.po?.showLetterColumn === "boolean"
+        ? shared.po.showLetterColumn
+        : DEFAULT_PREVIEW_OPTIONS.showLetterColumn,
+    showLetterBar:
+      typeof shared.po?.showLetterBar === "boolean"
+        ? shared.po.showLetterBar
+        : DEFAULT_PREVIEW_OPTIONS.showLetterBar,
+  };
+
   return {
     selectedThemeId,
     enforceClassic,
     columns,
     selectedPresetIds,
+    previewOptions,
   };
 }
 
@@ -118,6 +144,7 @@ export function useGameState(): UseGameStateResult {
   const [selectedPresetIds, setSelectedPresetIds] = useState<string[]>(
     initialState.selectedPresetIds,
   );
+  const [previewOptions, setPreviewOptions] = useState<PreviewOptions>(initialState.previewOptions);
 
   const activeTheme = useMemo(
     () => THEMES.find((theme) => theme.id === selectedThemeId) ?? DEFAULT_THEME,
@@ -138,6 +165,7 @@ export function useGameState(): UseGameStateResult {
     columns,
     enforceClassic,
     selectedPresetIds,
+    previewOptions,
   });
 
   const {
@@ -182,11 +210,32 @@ export function useGameState(): UseGameStateResult {
     clearShareNotification();
   }, [clearShareNotification]);
 
+  const handlePreviewOptionChange = useCallback(
+    <TOptionKey extends keyof PreviewOptions>(
+      optionKey: TOptionKey,
+      checked: PreviewOptions[TOptionKey],
+    ) => {
+      setPreviewOptions((previousOptions) => {
+        if (previousOptions[optionKey] === checked) {
+          return previousOptions;
+        }
+
+        return {
+          ...previousOptions,
+          [optionKey]: checked,
+        };
+      });
+      clearShareNotification();
+    },
+    [clearShareNotification],
+  );
+
   return {
     selectedThemeId,
     enforceClassic,
     columns,
     selectedPresetIds,
+    previewOptions,
     hasActivePresets,
     visibleColumns,
     activeThemePaperClass: activeTheme.paperClass,
@@ -201,6 +250,7 @@ export function useGameState(): UseGameStateResult {
     handleColumnChange,
     handleRerollColumn,
     handleDeleteColumn,
+    handlePreviewOptionChange,
     handleShare,
   };
 }
