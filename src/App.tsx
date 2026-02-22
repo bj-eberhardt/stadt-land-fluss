@@ -1,4 +1,5 @@
 import { ControlsPanel } from "./components/ControlsPanel";
+import { Footer } from "./components/Footer";
 import { HeroSection } from "./components/HeroSection";
 import { PreviewPanel } from "./components/PreviewPanel";
 import { ShareNotification } from "./components/ShareNotification";
@@ -71,6 +72,8 @@ export default function App() {
         onShare={handleShare}
         onDownloadPdf={handleDownloadPdf}
       />
+
+      <Footer />
     </main>
   );
 }

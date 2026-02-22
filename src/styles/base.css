@@ -39,6 +39,21 @@ button {
   gap: 1rem;
 }
 
+.app-footer {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: #6d5528;
+  padding: 0.1rem 0 0.4rem;
+}
+
+.app-footer small {
+  display: inline-block;
+  border: 1px dashed #cbb786;
+  background: #fff9e6b5;
+  border-radius: 999px;
+  padding: 0.2rem 0.65rem;
+}
+
 .hero,
 .panel {
   background: var(--panel);
