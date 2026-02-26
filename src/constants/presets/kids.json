@@ -1,0 +1,20 @@
+{
+  "id": "kids",
+  "name": "Kinder",
+  "columns": [
+    "Farbe",
+    "Tier",
+    "Essen",
+    "Süßigkeit",
+    "aus Holz",
+    "Im Kühlschrank",
+    "Sportart",
+    "Pizzabelag",
+    "etwas rundes",
+    "Auf dem Bauernhof",
+    "Kleiner als ein Fußball",
+    "Märchen",
+    "Im Flugzeug",
+    "In der Schule"
+  ]
+}

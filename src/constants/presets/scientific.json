@@ -1,0 +1,21 @@
+{
+  "id": "scientific",
+  "name": "Wissenschaftlich",
+  "columns": [
+    "Physikalische Größe",
+    "Chemisches Element",
+    "Wissenschaftler/in",
+    "Nobelpreisträger",
+    "Sternbild / Weltall",
+    "Laborgerät",
+    "Programmiersprache",
+    "Algorithmus",
+    "Erfindung",
+    "Geologie",
+    "Biologie",
+    "Mathebegriff",
+    "Wetterbegriff",
+    "Krankheit",
+    "Computerteil"
+  ]
+}
