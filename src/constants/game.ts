@@ -1,4 +1,4 @@
-﻿import type { Preset } from "../types/preset";
+import type { Preset } from "../types/preset";
 import type { PreviewOptions } from "../types/preview";
 import type { Theme } from "../types/theme";
 
@@ -13,158 +13,16 @@ export const DEFAULT_PREVIEW_OPTIONS: PreviewOptions = {
   showLetterBar: false,
 };
 
-export const PRESET_COLUMNS = [
-  "Tier",
-  "Beruf",
-  "Pflanze",
-  "Essen",
-  "Getränk",
-  "Sportart",
-  "Film",
-  "Serie",
-  "Musikband",
-  "Instrument",
-  "Farbe",
-  "Auto-Marke",
-  "Promi",
-  "Vorname",
-  "Nachname",
-  "Stadtteil",
-  "Bundesland",
-  "Fluss",
-  "Berg",
-  "Obst",
-  "Gemüse",
-  "Spiel",
-  "Buch",
-  "Superheld",
-  "Fantasywesen",
-  "Fortbewegungsmittel",
-  "Schulfach",
-  "Erfindung",
-  "Webseite",
-  "App",
-  "Emoji",
-  "Getränkemarke",
-  "Spitzname",
-  "Märchenfigur",
-  "Videospiel",
-  "Zeitschrift/Zeitung",
-  "Bauwerk",
-] as const;
+const presetModules = import.meta.glob("./presets/*.json", {
+  eager: true,
+  import: "default",
+}) as Record<string, Preset>;
 
-export const SCIENTIFIC_PRESET_COLUMNS = [
-  "Physikalische Größe",
-  "Chemisches Element",
-  "Wissenschaftler/in",
-  "Nobelpreisträger",
-  "Sternbild / Weltall",
-  "Laborgerät",
-  "Programmiersprache",
-  "Algorithmus",
-  "Erfindung",
-  "Geologie",
-  "Biologie",
-  "Mathebegriff",
-  "Wetterbegriff",
-  "Krankheit",
-  "Computerteil",
-] as const;
+const PRESET_DEFINITIONS = Object.entries(presetModules)
+  .sort(([pathA], [pathB]) => pathA.localeCompare(pathB))
+  .map(([, preset]) => preset) satisfies Preset[];
 
-export const ADULT_PRESET_COLUMNS = [
-  "Biermarke/Cocktail",
-  "Spirituose",
-  "Kartenspiel",
-  "Film ab 18",
-  "Sexstellung",
-  "peinliche Nachricht",
-  "Streitgrund",
-  "Anmachspruch",
-  "Date-Idee",
-  "Flirtspruch",
-  "Sexausrede",
-  "Nachtaktivität",
-  "Politiker",
-] as const;
-
-export const TV_AND_FILM_PRESET_COLUMNS = [
-  "Filmgenre",
-  "Fernsehserie",
-  "Schauspieler/in",
-  "Filmregisseur/in",
-  "Filmfigur",
-  "TV-Sender",
-  "Science-Fiction-Film",
-  "Romanzen-Film",
-  "Comedy Serie/Film",
-] as const;
-
-export const KIDS_PRESET_COLUMNS = [
-  "Farbe",
-  "Tier",
-  "Essen",
-  "Süßigkeit",
-  "aus Holz",
-  "Im Kühlschrank",
-  "Sportart",
-  "Pizzabelag",
-  "etwas rundes",
-  "Auf dem Bauernhof",
-  "Kleiner als ein Fußball",
-  "Märchen",
-  "Im Flugzeug",
-  "In der Schule",
-] as const;
-
-export const CLASSIC_PRESET_COLUMNS = [
-  "Stadt",
-  "Land",
-  "Fluss",
-  "Tier",
-  "Beruf",
-  "Pflanze",
-  "Name",
-  "Farbe",
-  "(Auto-)Marke",
-  "Gegenstand",
-  "Film",
-  "Sportart",
-  "Hauptstadt",
-  "Essen",
-] as const;
-
-export const PRESETS: Preset[] = [
-  {
-    id: "klassiker",
-    name: "Klassiker",
-    columns: CLASSIC_PRESET_COLUMNS,
-  },
-  {
-    id: "general",
-    name: "Allgemein",
-    columns: PRESET_COLUMNS,
-  },
-  {
-    id: "scientific",
-    name: "Wissenschaftlich",
-    columns: SCIENTIFIC_PRESET_COLUMNS,
-  },
-  {
-    id: "adult",
-    name: "Über 18",
-    columns: ADULT_PRESET_COLUMNS,
-  },
-  {
-    id: "tv-film",
-    name: "Fernsehen & Film",
-    columns: TV_AND_FILM_PRESET_COLUMNS,
-  },
-  {
-    id: "kids",
-    name: "Kinder",
-    columns: KIDS_PRESET_COLUMNS,
-  },
-];
+export const PRESETS: Preset[] = PRESET_DEFINITIONS;
 
 export const DEFAULT_SELECTED_PRESET_IDS: string[] = PRESETS.map((preset) => preset.id);
 

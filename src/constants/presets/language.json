@@ -1,0 +1,13 @@
+{
+  "id": "language",
+  "name": "Sprache",
+  "columns": [
+    "Nomen",
+    "Verb",
+    "Adjektiv",
+    "Englisches Wort",
+    "Französisches Wort",
+    "Wort mit Doppeltbuchstaben",
+    "Wort mit 3 Silben"
+  ]
+}

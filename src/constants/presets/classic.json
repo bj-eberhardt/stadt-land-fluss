@@ -1,0 +1,20 @@
+{
+  "id": "klassiker",
+  "name": "Klassiker",
+  "columns": [
+    "Stadt",
+    "Land",
+    "Fluss",
+    "Tier",
+    "Beruf",
+    "Pflanze",
+    "Name",
+    "Farbe",
+    "(Auto-)Marke",
+    "Gegenstand",
+    "Film",
+    "Sportart",
+    "Hauptstadt",
+    "Essen"
+  ]
+}

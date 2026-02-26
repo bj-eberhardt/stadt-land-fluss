@@ -1,0 +1,19 @@
+{
+  "id": "adult",
+  "name": "Über 18",
+  "columns": [
+    "Biermarke/Cocktail",
+    "Spirituose",
+    "Kartenspiel",
+    "Film ab 18",
+    "Sexstellung",
+    "peinliche Nachricht",
+    "Streitgrund",
+    "Anmachspruch",
+    "Date-Idee",
+    "Flirtspruch",
+    "Sexausrede",
+    "Nachtaktivität",
+    "Politiker"
+  ]
+}

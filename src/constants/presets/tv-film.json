@@ -1,0 +1,16 @@
+{
+  "id": "tv-film",
+  "name": "Fernsehen & Film",
+  "columns": [
+    "Filmgenre",
+    "Fernsehserie",
+    "Schauspieler/in",
+    "Filmregisseur/in",
+    "Filmfigur",
+    "TV-Sender",
+    "Science-Fiction-Film",
+    "Romanzen-Film",
+    "Comedy Serie/Film",
+    "Disney-Figur"
+  ]
+}
