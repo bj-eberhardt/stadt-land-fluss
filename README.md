@@ -6,9 +6,15 @@ Du kannst Kategorien flexibel zusammenstellen, Zufallskategorien nutzen, Themes 
 ![Vorschau der Anwendung](app-preview.jpg)
 
 Live testen:
-https://stadt-land-fluss.app.familie-bark.de/
+https://bj-eberhardt.github.io/stadt-land-fluss/
 
 ## Self Hosting (Quick Start)
+
+### Fertiges HTML
+
+Lade die _dist.tar.gz_ Datei aus dem Release unter https://github.com/bj-eberhardt/stadt-land-fluss/releases herunter
+und entpacke die Datei.
+Öffne entweder die _index.html_ in deinem Browser, oder hoste das Verzeichnis auf deinem Server.
 
 ### Docker Compose
 
