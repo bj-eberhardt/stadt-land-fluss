@@ -6,7 +6,7 @@ Du kannst Kategorien flexibel zusammenstellen, Zufallskategorien nutzen, Themes 
 ![Vorschau der Anwendung](app-preview.jpg)
 
 Live testen:
-https://stadt-land-fluss.app.familie-bark.de/
+https://bj-eberhardt.github.io/stadt-land-fluss/
 
 ## Self Hosting (Quick Start)
 
