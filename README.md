@@ -10,6 +10,11 @@ https://stadt-land-fluss.app.familie-bark.de/
 
 ## Self Hosting (Quick Start)
 
+### Fertiges HTML
+
+Lade die _dist.tar.gz_ Datei aus dem Release unter https://github.com/bj-eberhardt/stadt-land-fluss/releases herunter
+und entpacke die Datei. Öffne entweder die _index.html_ in deinem Browser, oder hoste das Verzeichnis auf deinem Server.
+
 ### Docker Compose
 
 1. Speichere den Inhalt in einer `docker-compose.yml`:
