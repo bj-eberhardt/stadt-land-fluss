@@ -19,7 +19,7 @@ jobs:
     if: github.event.pull_request.draft == false
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Setup project
         uses: ./.github/actions/setup-node-project
@@ -51,7 +51,7 @@ jobs:
       node_version: ${{ steps.node_version.outputs.value }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Setup project
         uses: ./.github/actions/setup-node-project
@@ -68,7 +68,7 @@ jobs:
         run: npm run build
 
       - name: Upload build artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: dist-node-${{ steps.node_version.outputs.value }}
           path: dist
@@ -76,7 +76,7 @@ jobs:
 
       - name: Upload Vitest JSON report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: vitest-report-node-${{ steps.node_version.outputs.value }}
           path: vitest-report.json
@@ -91,13 +91,13 @@ jobs:
       - name: Download Vitest report artifact
         if: always() && needs.test_build.result != 'skipped'
         continue-on-error: true
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: vitest-report-node-${{ needs.test_build.outputs.node_version }}
           path: .
 
       - name: Comment status on PR
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           script: |
             const fs = require('node:fs');
